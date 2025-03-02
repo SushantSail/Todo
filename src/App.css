@@ -197,19 +197,11 @@
     .showTask li{
       width: 100%;
     }
-    .addTask .task-form {
-      flex-direction: row; /* For larger screens, display input and button side by side */
-      gap: 20px; /* Space between input and button */
+
+    .addTask form{
+      flex-direction: column;
     }
-  
-    .addTask input {
-      flex: 1; /* Let input take most of the width */
-    }
-  
-    .addTask button {
-      width: auto; /* Button width adjusts to content */
-    }
-  
+
   }
 
   
