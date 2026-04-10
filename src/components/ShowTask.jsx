@@ -1,77 +1,46 @@
-import { useState } from "react";
+import React from 'react'
 
-const ToDo = () => {
-  const [taskList, setTaskList] = useState([]);
-  const [inputTask, setInputTask] = useState("");
 
-    // ✅ HANDLE SUBMIT
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (inputTask.trim() === '') return;
-    console.log("Submitted Value:", inputTask);
+export const ShowTask = ({tasklist,setTasklist,task,setTask}) => {
 
-    const newTask = {
-      id: new Date().getTime(),
-      taskName: inputTask,
-      isCompleted: false,
+    const handleDelete = (id) => {
+        setTasklist(tasklist.filter(todo => todo.id !== id));
+        // setTask(null);
     }
-    setTaskList([...taskList, newTask])
-    // setTaskList((prev) => [...prev, newTask]);   Both line Works.
-    console.log(taskList)
-    setInputTask('')
-  }
-
-  // ✅ HANDLE DELETE
-  function handleDelete(idToDelete) {
-    const updatedList = taskList.filter((task) => task.id !== idToDelete);
-    setTaskList(updatedList);
-  }
-
-  // ✅ HANDLE RESET
-  function handleReset() {
-    setTaskList([]);
-  }
-
-    // ✅ HANDLE Completion Status
-  function handleEdit(idToEdit) {
-    const updatedList = taskList.map((task) => {
-      if (task.id === idToEdit) {
-        return { ...task, isCompleted: !task.isCompleted };
-      }
-      return task;
-    });
-    setTaskList(updatedList);
     
-  }
-
+    const handleEdit = (id) => {
+        const editedTask = tasklist.find(todo => todo.id === id);
+        setTask(editedTask);
+        console.log(editedTask);
+    }
+   const handleAllDelete = () => {
+    setTasklist([]);
+    setTask({});
+   }
+ 
   return (
-    <div>
-      <h2>To Do App</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter Task"
-          value={inputTask}
-          onChange={(e) => setInputTask(e.target.value)}
-        />
-        <button type="submit">Add</button>
-        <button type="button" onClick={handleReset}>Reset</button>
-      </form>
+    <section className='showTask'>
+        <div className="head">
+            <div>
+                <span className='title'>Todo</span>
+                <span className='count'>{tasklist.length}</span>
+            </div>
+            <button onClick ={handleAllDelete} className='clearAll'>Clear All</button>
+            {/* onClick={() =>setTasklist([])}  */}
+        </div>
 
-      {
-        taskList.map((item) => (
-          <li key={item.id}>
-            <span style={{textDecoration : item.isCompleted ? 'line-through':'none'}}> 
-              {item.taskName} 
-              </span>
-            <button type="button"onClick={() => handleDelete(item.id)}>Delete</button>
-            <input type="checkbox" checked={item.isCompleted} 
-            onChange={() => handleEdit(item.id)}/>
-          </li>
-        ))
-      }
-    </div>
-  );
-};
-
-export default ToDo;
+        <ul>
+            {tasklist.map((todo) =>(
+            <li key={todo.id}>
+                <p> 
+                    <span className='name'>{todo.name}</span>
+                    <span className='time'>{todo.time}</span>
+                </p>
+                <i class="bi bi-pencil-square" onClick={()=> handleEdit(todo.id)}></i>
+                <i class="bi bi-trash" onClick={()=> handleDelete(todo.id)}></i>
+            </li>
+            ))}
+        </ul>
+    </section>
+  )
+}
